@@ -40,6 +40,10 @@ int main (void) {
     rectangle( res, matchLoc, Point( matchLoc.x + shape_template.cols , matchLoc.y + shape_template.rows ), Scalar::all(0), 2, 8, 0 );
     imshow( "image_window", img_display );
 
+    Rect crop(matchLoc.x , matchLoc.y - shape_template.rows, 2100, 2.75 * shape_template.rows);
+    Mat sub_image = img_display(crop);
+    imshow( "triangle_sub_image", sub_image );
+
     int reduction = 2;
     Size tailleReduite(img_display.cols/reduction, img_display.rows/reduction);
     Mat imreduite = Mat(tailleReduite,CV_8UC3); //cree une image � 3 canaux de profondeur 8 bits chacuns
