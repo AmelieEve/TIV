@@ -19,11 +19,11 @@ using namespace cv;
 
 int main (void) {
     //charge et affiche l'image (� MODIFIER) :
-    string imName = "../00000.png";
+    string imName = "../NicIcon/all-scans/00000.png";
     Mat img_rgb = imread(imName);
     Mat img_gray;
     cvtColor(img_rgb, img_gray, COLOR_BGR2GRAY);
-    Mat shape_template = imread("../triangle_danger.png",0);
+    Mat shape_template = imread("../symboles/triangle_danger.png",0);
 
     Mat img_display;
     img_rgb.copyTo( img_display );
