@@ -26,6 +26,7 @@ int max_x_down_l = 400;
 int min_y_down_l = 3000;
 //////////////////////////////////////////////////////////////////////////
 
+/*
 int main(void) {
     //charge et affiche l'image
     string imName = "../NicIcon/all-scans/00106.png";
@@ -93,4 +94,4 @@ int main(void) {
     imshow("eroded", imdb);
 
     waitKey(0);
-}
+}*/

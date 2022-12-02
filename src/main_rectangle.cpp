@@ -23,7 +23,7 @@ int main (void) {
     Mat img_rgb = imread(imName);
     Mat img_gray;
     cvtColor(img_rgb, img_gray, COLOR_BGR2GRAY);
-    Mat shape_template = imread("../symboles/triangle_danger.png",0);
+    Mat shape_template = imread("../symboles/accident.png",0);
 
     Mat img_display;
     img_rgb.copyTo( img_display );
