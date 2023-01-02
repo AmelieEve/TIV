@@ -56,3 +56,4 @@ Le taux de réussite global est alors de 82,32% (22186/(770*35))
 Sur la base de test, 8/12 pages sont correctement rectifiées. On a en sortie 448 fichiers (soit 224 imagettes).
 
 Le taux de réussite global est alors de 53,33%
+En revanche, on a trouvé 5 imagettes qui n'ont pas été labellisées correctement (à chaque fois, le logo "accident" a été détecté au lieu de "person")
