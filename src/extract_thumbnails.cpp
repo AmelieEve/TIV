@@ -5,6 +5,7 @@
 #include "extract_thumbnails.hpp"
 #include <iostream>
 #include "opencv2/highgui.hpp"
+#include <fstream>
 using namespace std;
 using namespace cv;
 
@@ -171,36 +172,69 @@ void filterSquares(vector<vector<Point>>& squares, vector<vector<Point>>& filter
     }
 }
 
-void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filteredSquares, const string &filePrefix){
-    int i = 1;
-    for(vector<Point> square : filteredSquares){
-        imwrite(filePrefix + to_string(i++) + ".png",extractedLineImg(Range(square[0].y, square[3].y), Range(square[0].x, square[3].x)));
-    }
+void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filteredSquares, const string &filePrefix, const string& sizeSymbol){
+    int i = filteredSquares.size();
     if(filteredSquares.size() > 5){
         cerr << "More than 5 thumbnails extracted" << endl;
     }
+
+    //reextract information from file prefix for text file
+    string infos = filePrefix;
+    infos.erase(0,10);
+    string row = infos.substr(infos.size()-2, 1);
+    string pageNumber = infos.substr(infos.size()-5, 2);
+    string scripterNumber = infos.substr(infos.size()-9, 3);
+    string formNumber = scripterNumber+pageNumber;
+    string label = infos.substr(0, infos.size()-10);
+
+    for(vector<Point> square : filteredSquares){
+        string column = to_string(i);
+        imwrite(filePrefix + column + ".png",extractedLineImg(Range(square[0].y, square[3].y), Range(square[0].x, square[3].x)));
+        ofstream textFile(filePrefix + column + ".txt");
+        textFile << "# projet TIV 4INFO 2021-2022 - option MI\n"
+            << "# group : EVENO Amélie - HUMEAU Dorian - ROZELAAR Marceline - SOREL Maxime\n"
+            << "label " << label << "\n"
+            << "form " << formNumber << "\n"
+            << "scripter " << scripterNumber << "\n"
+            << "page " << pageNumber << "\n"
+            << "row " << row << "\n"
+            << "column " << column << "\n"
+            << "size" << sizeSymbol << "\n"
+            << endl;
+        i--;
+    }
 }
 
-void mainExtractThumbnails(const Mat &extractedLineImg, const string& filePrefix) {
+void mainExtractThumbnails(const Mat &extractedLineImg, const string& filePrefix, const string& sizeSymbol) {
     vector<vector<Point>> squares;
     detectSquares(extractedLineImg, squares);
-//    Mat debugSquaresImg = debugSquares(squares, sub_image);
-//    imshow("debug detected squares", debugSquaresImg);
-    cout << "Total number of detected squares = " + to_string(squares.size()) << endl;
+    {
+//        Mat debugSquaresImg = debugSquares(squares, extractedLineImg);
+//        imshow("debug detected squares", debugSquaresImg);
+//        cout << "Total number of detected squares = " + to_string(squares.size()) << endl;
+    }
 
     vector<vector<Point>> filteredSquares;
     filterSquares(squares, filteredSquares);
-//    Mat debugFilteredSquaresImg = debugSquares(filteredSquares, sub_image);
-//    imshow("debug filtered squares", debugFilteredSquaresImg);
-    cout << "Number of filtered squares = " + to_string(filteredSquares.size()) << " \n";
-    for(const auto & square : filteredSquares){
-        cout << square << " \n";
+    {
+//        Mat debugFilteredSquaresImg = debugSquares(filteredSquares, extractedLineImg);
+//        imshow("debug filtered squares", debugFilteredSquaresImg);
     }
-    cout << endl;
+    cout << "Number of filtered squares = " + to_string(filteredSquares.size()) << " \n";
+    {
+//        for(const auto & square : filteredSquares){
+//            cout << square << " \n";
+//        }
+//        cout << endl;
+    }
 
-    extractThumbnails(extractedLineImg, filteredSquares, filePrefix);
-    /*for(int i = 0; i<thumbnails.size(); i++){
-        string title = symbol.substr(12, symbol.size()) + " n° " + to_string(thumbnails.size()-i); //pb d'indice pour les symboles de police ?
-        imshow(title, thumbnails[i]);
-    }*/
+
+    extractThumbnails(extractedLineImg, filteredSquares, filePrefix, sizeSymbol);
+    {
+//        for(int i = 0; i<filteredSquares.size(); i++){
+//            string title = " n° " + to_string(filteredSquares.size()-i);
+//            imshow(title, filteredSquares[i]);
+//        }
+    }
+
 }

@@ -48,13 +48,13 @@ void filterSquares(vector<vector<Point>>& squares, vector<vector<Point>>& filter
 /*
  * Create images cropped from the original subimage using the 5 squares' coordinates
  */
-void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filteredSquares, const string &filePrefix);
+void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filteredSquares, const string &filePrefix, const string& sizeSymbol);
 
 /**
  * Main function for that part of the pre-processing
  * @param extractedLineImg the cropped rectangle image containing a line of squares with drawn symbols
  * @param thumbnails
  */
-void mainExtractThumbnails(const Mat &extractedLineImg, const string& filePrefix);
+void mainExtractThumbnails(const Mat &extractedLineImg, const string& filePrefix, const string& sizeSymbol);
 
 #endif //PROJET_OPENCV_CMAKE_EXTRACT_THUMBNAILS_HPP

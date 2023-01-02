@@ -104,7 +104,7 @@ int main (void) {
                     prefix+="_"+ fixedDigitInt(pageNb, 2);
                     prefix+="_"+ fixedDigitInt(guessRow(matchLoc.y - 120),1);
                     prefix+="_";
-                    mainExtractThumbnails(sub_image, prefix);
+                    mainExtractThumbnails(sub_image, prefix, ""); //prendre en compte le sizeSymbol une fois la détection de la taille implémentée
                     break;
                 }
                 else
