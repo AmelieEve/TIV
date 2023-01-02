@@ -37,21 +37,21 @@ int guessRow(int y) {
     return 1;
 }
 
-int main (void) {
+int main(void) {
     //charge et affiche l'image (� MODIFIER) :
-    string imName = "../NicIcon/all-scans/00001.png";
+    string imName = "../NicIcon/all-scans/00003.png";
     int scripterNb = 0;
     int pageNb = 1;
     Mat img_rgb;
     rectify(imName, img_rgb);
     Mat img_gray;
     cvtColor(img_rgb, img_gray, COLOR_BGR2GRAY);
-    Mat shape_template = imread("../symboles/car.png",0);
+    Mat shape_template = imread("../symboles/car.png", 0);
 
     Mat img_display;
-    img_rgb.copyTo( img_display );
+    img_rgb.copyTo(img_display);
 
-    Mat res;
+    Mat res, res_sub;
     Point matchLoc;
 
     /*** Un symbole, une image ***/
@@ -76,31 +76,72 @@ int main (void) {
     vector<cv::String> symb;
     glob("../symboles/*.png", symb, false);
     vector<Mat> symboles;
+
+    vector<cv::String> size_templ;
+    glob("../size_template/*.png", size_templ, false);
+    vector<Mat> size_templates;
+
     size_t count = symb.size();
-    for (size_t i=0; i<count; i++) {
+    int res_size;
+    for (size_t i = 0; i < count; i++) {
         std::cout << "symbole testé : " << symb[i] << std::endl;
-        symboles.push_back(imread(symb[i],IMREAD_GRAYSCALE));
+        symboles.push_back(imread(symb[i], IMREAD_GRAYSCALE));
         bool parsed[] = {false, false, false, false, false, false, false};
         try {
             matchTemplate(img_gray, symboles[i], res, TM_CCORR_NORMED);
             threshold(res, res, 0.1, 1., THRESH_TOZERO);
-            while(true)
-            {
+            while (true) {
                 double minval, maxval;
-                double threshold = (i == 4? 0.995 : 0.99); //Pour le symbole electricity (i=4), il reconnait parfois la croix en bas comme étant le symbole electricity donc augmenter le seuil pour i=4
+                double thresh = (i == 4 ? 0.995
+                                        : 0.99); //Pour le symbole electricity (i=4), il reconnait parfois la croix en bas comme étant le symbole electricity donc augmenter le seuil pour i=4
                 Point minloc, maxloc;
                 minMaxLoc(res, &minval, &maxval, &minloc, &maxloc);
                 matchLoc = maxloc;
 
-                if(maxval >= threshold)
-                {
+                if (maxval >= thresh) {
                     int row = guessRow(matchLoc.y - 120);
                     floodFill(res, maxloc, 0); //mark drawn blob
                     if (parsed[row-1])
                         continue; // Pour ne pas refaire le traitement d'une même ligne
                     parsed[row-1] = true;
+
                     Rect crop(matchLoc.x - 40, matchLoc.y - 120, 2100, 360);
                     Mat sub_image = img_display(crop);
+                    Mat sub_img_gray;
+                    cvtColor(sub_image, sub_img_gray, COLOR_BGR2GRAY);
+                    res_size=-1;
+                    for (size_t j = 0; j < size_templ.size(); j++) {
+                        size_templates.push_back(imread(size_templ[j], IMREAD_GRAYSCALE));
+                        try {
+                            matchTemplate(sub_img_gray, size_templates[j], res_sub, TM_CCORR_NORMED);
+                            threshold(res_sub, res_sub, 0.1, 1., THRESH_TOZERO);
+                            double minval2, maxval2;
+                            double threshold2 = 0.98;
+                            Point minloc2, maxloc2;
+                            minMaxLoc(res_sub, &minval2, &maxval2, &minloc2, &maxloc2);
+                            if (maxval2 >= threshold2) {
+                                cout << "j = " << j << endl;
+                                res_size = j;
+                            }
+                        } catch (cv::Exception &exception) {
+
+                        }
+                    }
+                    string size="";
+                    switch (res_size){
+                        case -1 :
+                            break;
+                        case 0 :
+                            size=" large";
+                            break;
+                        case 1 :
+                            size=" medium";
+                            break;
+                        case 2 :
+                            size=" small";
+                    }
+
+
                     //imshow(  "test " + symb[i], sub_image);
 //                    i--; //pour retester le meme objet si on l'a déjà trouvé, mais il faut dans ce cas que je genere une sous image ne contenant pas la partie extraite puis refaire l'opération dessus //TODO
                     //Extract thumbnails from line
@@ -110,7 +151,7 @@ int main (void) {
                     prefix+="_"+ fixedDigitInt(pageNb, 2);
                     prefix+="_"+ fixedDigitInt(row,1);
                     prefix+="_";
-                    mainExtractThumbnails(sub_image, prefix, ""); //prendre en compte le sizeSymbol une fois la détection de la taille implémentée
+                    mainExtractThumbnails(sub_image, prefix, size); //prendre en compte le sizeSymbol une fois la détection de la taille implémentée
                 }
                 else
                 {
