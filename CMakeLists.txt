@@ -16,7 +16,7 @@ add_executable(Projet_OpenCV_CMake
         src/imageRectifier.cpp
         include/imageRectifier.h
         src/extract_thumbnails.cpp
-        include/extract_thumbnails.hpp)
+        include/extract_thumbnails.hpp include/main_rectangle.h)
 
 target_link_libraries(Projet_OpenCV_CMake ${OpenCV_LIBS})
 

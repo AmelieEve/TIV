@@ -17,6 +17,7 @@ using namespace std;
 using namespace cv;
 
 #include "imageRectifier.h"
+#include "main_rectangle.h"
 
 
 string fileFromIds(int seriesId, int fileId, string basePath) {
@@ -27,16 +28,18 @@ string fileFromIds(int seriesId, int fileId, string basePath) {
 }
 
 
-/*
+
 int main(void) {
-//    for (int iSeries = 0; iSeries < 35; iSeries++)
-//        for (int iFile = 0; iFile < 22; iFile++)
-//            rectify(fileFromIds(iSeries, iFile, "../NicIcon/all-scans/"));
-    Mat im;
-    rectify("../NicIcon/all-scans/00020.png", im);
-    namedWindow("base", WINDOW_NORMAL);
-    imshow("base", im);
-    waitKey(0);
+    int nbPagesGood = 0;
+    int nbPagesTotal = 0;
+    for (int iSeries = 0; iSeries < 35; iSeries++)
+        for (int iFile = 0; iFile < 22; iFile++) {
+            nbPagesTotal++;
+            string file = fileFromIds(iSeries, iFile, "../NicIcon/all-scans/");
+            if (parse_page(file, iSeries, iFile))
+                nbPagesGood++;
+        }
+
+    cout << "DONE! " << nbPagesGood << "/" << nbPagesTotal << " pages correctly parsed" << endl;
 
 }
-*/
