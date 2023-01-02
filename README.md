@@ -44,3 +44,10 @@ Les cas limites que nous avons identifiés sont les suivants :
 
 ### Taux de succès et qualité de l'extraction
 
+Sur la base d'entraînement, 755/770 pages sont correctement rectifiées (si une croix n'est pas détectée, la page est adandonnée, et les pages avec le texte manuscrit a été exclu)
+Cela représente alors 98% de réussite
+
+Les données de sortie comptent 44372 fichiers (imagettes + fichier texte, soit 22186 imagettes)
+En théorie, avec nos 755 pages on devrait avoir 26425 imagettes, cela représente donc 83,96% de réussite sur cette étape.
+
+Le taux de réussite global est alors de 82,32% (22186/(770*35))
