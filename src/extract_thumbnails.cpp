@@ -191,7 +191,7 @@ void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filte
         string column = to_string(i);
         imwrite(filePrefix + column + ".png",extractedLineImg(Range(square[0].y, square[3].y), Range(square[0].x, square[3].x)));
         ofstream textFile(filePrefix + column + ".txt");
-        textFile << "# projet TIV 4INFO 2021-2022 - option MI\n"
+        textFile << "# projet TIV 4INFO 2022-2023 - option MI\n"
             << "# groupe : EVENO Amélie - HUMEAU Dorian - ROZELAAR Marceline - SOREL Maxime\n"
             << "label " << label << "\n"
             << "form " << formNumber << "\n"
