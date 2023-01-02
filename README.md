@@ -11,7 +11,7 @@ Cette partie est gérée par le module ```imageRectifier```.
 
 2. **Reconnaissance des modèles de symboles**  
 > On réalise ensuite un template matching sur l'image qui permet de récupérer les positions des modèles de symboles.  
-Cette partie est gérée par le module ```extractLines```.
+Cette partie est gérée par le module ```extractLines```. Nous avons essayé deux méthodes différentes lors du template matching, utilisant chacune un système de calcul complètement différent : ```TM_CCORR_NORMED``` et ```TM_CCOEFF_NORMED```. Les résultats des deux méthodes sont détaillés plus loin dans l'analyse de nos performances.
 
 
 3. **Extraction de la ligne de symboles et de la taille si spécifiée**  
