@@ -94,12 +94,11 @@ bool parse_page(const std::string &imName, int scripterNb, int pageNb) {
         symboles.push_back(imread(symb[i], IMREAD_GRAYSCALE));
         bool parsed[] = {false, false, false, false, false, false, false};
         try {
-            matchTemplate(img_gray, symboles[i], res, TM_CCORR_NORMED);
+            matchTemplate(img_gray, symboles[i], res, TM_CCOEFF_NORMED);
             threshold(res, res, 0.1, 1., THRESH_TOZERO);
             while (true) {
                 double minval, maxval;
-                double thresh = (i == 4 ? 0.995
-                                        : 0.99); //Pour le symbole electricity (i=4), il reconnait parfois la croix en bas comme étant le symbole electricity donc augmenter le seuil pour i=4
+                double thresh = 0.55; //Pour le symbole electricity (i=4), il reconnait parfois la croix en bas comme étant le symbole electricity donc augmenter le seuil pour i=4
                 Point minloc, maxloc;
                 minMaxLoc(res, &minval, &maxval, &minloc, &maxloc);
                 matchLoc = maxloc;
