@@ -80,6 +80,7 @@ int main (void) {
     for (size_t i=0; i<count; i++) {
         std::cout << "symbole testé : " << symb[i] << std::endl;
         symboles.push_back(imread(symb[i],IMREAD_GRAYSCALE));
+        bool parsed[] = {false, false, false, false, false, false, false};
         try {
             matchTemplate(img_gray, symboles[i], res, TM_CCORR_NORMED);
             threshold(res, res, 0.1, 1., THRESH_TOZERO);
@@ -93,6 +94,11 @@ int main (void) {
 
                 if(maxval >= threshold)
                 {
+                    int row = guessRow(matchLoc.y - 120);
+                    floodFill(res, maxloc, 0); //mark drawn blob
+                    if (parsed[row-1])
+                        continue; // Pour ne pas refaire le traitement d'une même ligne
+                    parsed[row-1] = true;
                     Rect crop(matchLoc.x - 40, matchLoc.y - 120, 2100, 360);
                     Mat sub_image = img_display(crop);
                     //imshow(  "test " + symb[i], sub_image);
@@ -102,11 +108,9 @@ int main (void) {
                     prefix.erase(prefix.size()-4, 4);
                     prefix+="_"+ fixedDigitInt(scripterNb, 3);
                     prefix+="_"+ fixedDigitInt(pageNb, 2);
-                    prefix+="_"+ fixedDigitInt(guessRow(matchLoc.y - 120),1);
+                    prefix+="_"+ fixedDigitInt(row,1);
                     prefix+="_";
                     mainExtractThumbnails(sub_image, prefix, ""); //prendre en compte le sizeSymbol une fois la détection de la taille implémentée
-                    floodFill(res, maxloc, 0); //mark drawn blob
-                    //break;
                 }
                 else
                 {
