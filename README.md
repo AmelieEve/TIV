@@ -67,10 +67,10 @@ qui va justement mesurer là où la luminosité est la plus proche en tous point
 
 ### Avec CCOEFF (coefficient de corrélation)
 
-Les données de sortie comptent XXXXX fichiers (soit XXXXX imagettes)
+Les données de sortie comptent 44356 fichiers (soit 22178 imagettes)
 En théorie, avec nos 755 pages on devrait avoir 26425 imagettes, cela représente donc XX,XX% de réussite sur cette étape.
 
-Le taux de réussite global est alors de XX,XX% (XXXXX/(770*35))
+Le taux de réussite global est alors de 82,29% (22178/(770*35))
 
 Avec la méthode par coefficient de corrélation, on a en sortie 548 fichiers (soit 274 imagettes) sur la base de test, ce qui correspond à un taux de réussite de 97.85% si on ne compte que les 8 pages extraites.
 
