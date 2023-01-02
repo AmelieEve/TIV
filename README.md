@@ -34,26 +34,49 @@ Le fichier texte en .txt est nommé de la même façon et contient les informati
 > Cette partie est également gérée par le module ```extract_thumbnails``` et les fichiers générés sont stockés dans le dossier ```output```.  
 
 
-## Performances
+# Performances
 
-### Cas limites
+## Cas limites
 Les cas limites que nous avons identifiés sont les suivants :
 - certaines pages présentent des défauts au niveau des croix dans les coins qui nous servent de repères pour redresser l'image, notamment des traces de stylo ou blanco. Une succession d'opérations d'érosion et dilatation au cours de la première étape de notre chaîne de traitement permet de détecter malgré tout les croix dans la plupart des cas.
 - certaines pages ne sont pas des formulaires à proprement parler mais contiennent uniquement du texte écrit à la main qui ne nous intéresse pas (ex : formulaire n°00022 dans la base d'entraînement).
 - si un scripteur dessinait un carré parfait d'une taille proche des cases, cela pourrait poser problème à l'extraction des imagettes, mais nous n'avons pas rencontré ce cas.
 
-### Taux de succès et qualité de l'extraction
+## Taux de succès et qualité de l'extraction
 
 Sur la base d'entraînement, 755/770 pages sont correctement rectifiées (si une croix n'est pas détectée, la page est adandonnée, et les pages avec le texte manuscrit a été exclu)
-Cela représente alors 98% de réussite
+Cela représente alors 98% de réussite.
+
+Sur la base de test, seulement 8/12 pages sont correctement rectifiées.
+
+### Avec CCORR (corrélation croisée)
 
 Les données de sortie comptent 44372 fichiers (imagettes + fichier texte, soit 22186 imagettes)
 En théorie, avec nos 755 pages on devrait avoir 26425 imagettes, cela représente donc 83,96% de réussite sur cette étape.
 
 Le taux de réussite global est alors de 82,32% (22186/(770*35))
 
+Avec la méthode par corrélation croisée, on a en sortie 448 fichiers (soit 224 imagettes) sur la base de test.
 
-Sur la base de test, 8/12 pages sont correctement rectifiées. On a en sortie 448 fichiers (soit 224 imagettes).
+Le taux de réussite global est alors de 53,33%.
+De plus, on a trouvé 5 imagettes qui n'ont pas été labellisées correctement (à chaque fois, le logo "accident" a été détecté au lieu de "person").
 
-Le taux de réussite global est alors de 53,33%
-En revanche, on a trouvé 5 imagettes qui n'ont pas été labellisées correctement (à chaque fois, le logo "accident" a été détecté au lieu de "person")
+Cela s'explique car les images données sur le jeu de test n'ont pas du tout la même luminosité et ainsi, 
+les niveaux de gris sont très différents, ce qui joue énormément sur la méthode par corrélation croisée 
+qui va justement mesurer là où la luminosité est la plus proche en tous points de l'image.
+
+### Avec CCOEFF (coefficient de corrélation)
+
+Les données de sortie comptent XXXXX fichiers (soit XXXXX imagettes)
+En théorie, avec nos 755 pages on devrait avoir 26425 imagettes, cela représente donc XX,XX% de réussite sur cette étape.
+
+Le taux de réussite global est alors de XX,XX% (XXXXX/(770*35))
+
+Avec la méthode par coefficient de corrélation, on a en sortie 548 fichiers (soit 274 imagettes) sur la base de test, ce qui correspond à un taux de réussite de 97.85% si on ne compte que les 8 pages extraites.
+
+Le taux de réussite global est alors de 65,24%. (avec les 12 pages, 4 ayant été écartées lors de la première étape).
+Aucune image est fausse-positive : chaque image a bien été répertoriée lors de cette méthode.
+
+Cette méthode, utilisant un niveau binaire et non les niveaux de gris, 
+est bien plus précise lorsque l'image ne possède pas la même luminosité car on n'enlève la contrainte de niveau de gris.
+Elle est donc bien plus polyvalente en général.
