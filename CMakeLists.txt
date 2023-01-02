@@ -11,7 +11,12 @@ include_directories(include ${OpenCV_INCLUDE_DIRS})
 add_executable(Projet_OpenCV_CMake
         include/histogram.hpp
         src/histogram.cpp
-        src/main_test_opencv.cpp src/imageRectifier.cpp include/imageRectifier.h)
+        src/main_test_opencv.cpp
+        src/main_rectangle.cpp
+        src/imageRectifier.cpp
+        include/imageRectifier.h
+        src/extract_thumbnails.cpp
+        include/extract_thumbnails.hpp)
 
 target_link_libraries(Projet_OpenCV_CMake ${OpenCV_LIBS})
 

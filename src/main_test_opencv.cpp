@@ -27,11 +27,11 @@ string fileFromIds(int seriesId, int fileId, string basePath) {
 }
 
 
-
+/*
 int main(void) {
-    /*for (int iSeries = 0; iSeries < 35; iSeries++)
-        for (int iFile = 0; iFile < 22; iFile++)
-            rectify(fileFromIds(iSeries, iFile, "../NicIcon/all-scans/"));*/
+//    for (int iSeries = 0; iSeries < 35; iSeries++)
+//        for (int iFile = 0; iFile < 22; iFile++)
+//            rectify(fileFromIds(iSeries, iFile, "../NicIcon/all-scans/"));
     Mat im;
     rectify("../NicIcon/all-scans/00020.png", im);
     namedWindow("base", WINDOW_NORMAL);
@@ -39,3 +39,4 @@ int main(void) {
     waitKey(0);
 
 }
+*/

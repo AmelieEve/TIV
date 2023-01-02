@@ -14,8 +14,8 @@ using namespace std;
 #include "opencv2/highgui.hpp"
 using namespace cv;
 
+#include "extract_thumbnails.hpp"
 #include "histogram.hpp"
-
 
 int main (void) {
     //charge et affiche l'image (� MODIFIER) :
@@ -67,13 +67,16 @@ int main (void) {
                 Point minloc, maxloc;
                 minMaxLoc(res, &minval, &maxval, &minloc, &maxloc);
                 matchLoc = maxloc;
-                
+
                 if(maxval >= threshold)
                 {
                     Rect crop(matchLoc.x - 40, matchLoc.y - 120, 2100, 360);
                     Mat sub_image = img_display(crop);
                     imshow(  "test " + symb[i], sub_image);
 //                    i--; //pour retester le meme objet si on l'a déjà trouvé, mais il faut dans ce cas que je genere une sous image ne contenant pas la partie extraite puis refaire l'opération dessus //TODO
+                    //Extract thumbnails from line
+                    vector<Mat> thumbnails;
+                    mainExtractThumbnails(sub_image, symb[i], thumbnails);
                     break;
                 }
                 else
