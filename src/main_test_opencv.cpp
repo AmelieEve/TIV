@@ -22,24 +22,29 @@ using namespace cv;
 
 string fileFromIds(int seriesId, int fileId, string basePath) {
     std::ostringstream oss;
-    oss << std::setw(2) << std::setfill('0') << seriesId;
-    oss << std::setw(3) << fileId;
+    oss << std::setw(3) << std::setfill('0') << seriesId;
+    oss << std::setw(2) << fileId;
     return basePath + oss.str() + ".png";
 }
 
 
 
-int main(void) {
+int main(int argc, char** argv) {
     int nbPagesGood = 0;
     int nbPagesTotal = 0;
-    for (int iSeries = 0; iSeries < 1; iSeries++)
-        for (int iSeries = 1; iSeries < 7; iSeries++)
-            for (int iFile = 1; iFile < 3; iFile++) {
-                nbPagesTotal++;
-                string file = fileFromIds(iSeries, iFile, "../base_test/");
-                if (parse_page(file, iSeries, iFile))
-                    nbPagesGood++;
-            }
+    int deb = 0;
+    int fin = 35;
+    if (argc>=3) {
+        deb = ::atoi(argv[1]);
+        fin = ::atoi(argv[2]);
+    }
+    for (int iSeries = deb; iSeries < fin; iSeries++)
+        for (int iFile = 0; iFile < 22; iFile++) {
+            nbPagesTotal++;
+            string file = fileFromIds(iSeries, iFile, "../NicIcon/all-scans/");
+            if (parse_page(file, iSeries, iFile))
+                nbPagesGood++;
+        }
 
     cout << "DONE! " << nbPagesGood << "/" << nbPagesTotal << " pages correctly parsed" << endl;
 

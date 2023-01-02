@@ -33,6 +33,11 @@ Cette partie est gérée par le module ```extract_thumbnails```.
 Le fichier texte en .txt est nommé de la même façon et contient les informations suivantes : label, numéro de formulaire, numéro de scripteur, numéro de page, ligne, colonne et taille (si spécifiée). Toutes les informations sont déduisibles du nom du fichier sauf la taille qui est renseignée d'après le résultat récupéré lors de l'étape 3.  
 > Cette partie est également gérée par le module ```extract_thumbnails``` et les fichiers générés sont stockés dans le dossier ```output```.  
 
+# Exécution sur la base d'entraînement
+
+Il faut inclure les scans dans `NicIcon/all-scans` (qui ne font pas partie de l'archive pour des raisons de place), puis compiler et exécuter le projet sous CLion.
+Il est également possible d'indiquer en paramètre de l'exécutable la plage de début (inclus) et fin (exclu) de groupe de page à traiter (numéro de scripeteur), par exemple avec `./Projet_OpenCV_CMake 0 2` qui traitera les pages 00000 à 00121. Cela permet de faire des traitements en parallèle
+
 
 # Performances
 
