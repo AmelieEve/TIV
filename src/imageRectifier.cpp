@@ -34,8 +34,8 @@ bool rectify(string imName, Mat &out) {
 
 
     Mat imd;
-    cvtColor(im,im, COLOR_BGR2GRAY);
-    morphologyEx(im,imd, MORPH_ERODE, getStructuringElement(MORPH_CROSS, Size(6,6)));
+    cvtColor(im,imd, COLOR_BGR2GRAY);
+    morphologyEx(imd,imd, MORPH_ERODE, getStructuringElement(MORPH_CROSS, Size(6,6)));
     dilate(imd, imd, getStructuringElement(MORPH_CROSS, Size(25,25)));
     Mat imdb;
 

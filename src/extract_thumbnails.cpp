@@ -171,16 +171,17 @@ void filterSquares(vector<vector<Point>>& squares, vector<vector<Point>>& filter
     }
 }
 
-void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filteredSquares, vector<Mat>& thumbnails){
+void extractThumbnails(const Mat& extractedLineImg, vector<vector<Point>>& filteredSquares, const string &filePrefix){
+    int i = 1;
     for(vector<Point> square : filteredSquares){
-        thumbnails.push_back(extractedLineImg(Range(square[0].y, square[3].y), Range(square[0].x, square[3].x)));
+        imwrite(filePrefix + to_string(i++) + ".png",extractedLineImg(Range(square[0].y, square[3].y), Range(square[0].x, square[3].x)));
     }
     if(filteredSquares.size() > 5){
         cerr << "More than 5 thumbnails extracted" << endl;
     }
 }
 
-void mainExtractThumbnails(const Mat& extractedLineImg, string symbol, vector<Mat> thumbnails){
+void mainExtractThumbnails(const Mat &extractedLineImg, const string& filePrefix) {
     vector<vector<Point>> squares;
     detectSquares(extractedLineImg, squares);
 //    Mat debugSquaresImg = debugSquares(squares, sub_image);
@@ -197,9 +198,9 @@ void mainExtractThumbnails(const Mat& extractedLineImg, string symbol, vector<Ma
     }
     cout << endl;
 
-    extractThumbnails(extractedLineImg, filteredSquares, thumbnails);
-    for(int i = 0; i<thumbnails.size(); i++){
+    extractThumbnails(extractedLineImg, filteredSquares, filePrefix);
+    /*for(int i = 0; i<thumbnails.size(); i++){
         string title = symbol.substr(12, symbol.size()) + " n° " + to_string(thumbnails.size()-i); //pb d'indice pour les symboles de police ?
         imshow(title, thumbnails[i]);
-    }
+    }*/
 }

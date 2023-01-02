@@ -8,6 +8,8 @@
 
 
 #include <iostream>
+#include <iomanip>
+
 using namespace std;
 
 #include "opencv2/imgproc.hpp"
@@ -16,11 +18,32 @@ using namespace cv;
 
 #include "extract_thumbnails.hpp"
 #include "histogram.hpp"
+#include "imageRectifier.h"
+
+std::string fixedDigitInt(int input, int digits) {
+    std::stringstream ss;
+    ss << std::setw(digits) << std::setfill('0') << input;
+    return ss.str();
+}
+
+int guessRow(int y) {
+    // Pour savoir sur quelle ligne on est, on regarde simplement sur un intervalle et puis ItWorks(TM)
+    if (y>2466) return 7;
+    if (y>2133) return 6;
+    if (y>1770) return 5;
+    if (y>1430) return 4;
+    if (y>1080) return 3;
+    if (y>740) return 2;
+    return 1;
+}
 
 int main (void) {
     //charge et affiche l'image (� MODIFIER) :
     string imName = "../NicIcon/all-scans/00001.png";
-    Mat img_rgb = imread(imName);
+    int scripterNb = 0;
+    int pageNb = 1;
+    Mat img_rgb;
+    rectify(imName, img_rgb);
     Mat img_gray;
     cvtColor(img_rgb, img_gray, COLOR_BGR2GRAY);
     Mat shape_template = imread("../symboles/car.png",0);
@@ -72,11 +95,16 @@ int main (void) {
                 {
                     Rect crop(matchLoc.x - 40, matchLoc.y - 120, 2100, 360);
                     Mat sub_image = img_display(crop);
-                    imshow(  "test " + symb[i], sub_image);
+                    //imshow(  "test " + symb[i], sub_image);
 //                    i--; //pour retester le meme objet si on l'a déjà trouvé, mais il faut dans ce cas que je genere une sous image ne contenant pas la partie extraite puis refaire l'opération dessus //TODO
                     //Extract thumbnails from line
-                    vector<Mat> thumbnails;
-                    mainExtractThumbnails(sub_image, symb[i], thumbnails);
+                    string prefix = "../output/" + symb[i].substr(12, symb[i].size());
+                    prefix.erase(prefix.size()-4, 4);
+                    prefix+="_"+ fixedDigitInt(scripterNb, 3);
+                    prefix+="_"+ fixedDigitInt(pageNb, 2);
+                    prefix+="_"+ fixedDigitInt(guessRow(matchLoc.y - 120),1);
+                    prefix+="_";
+                    mainExtractThumbnails(sub_image, prefix);
                     break;
                 }
                 else
@@ -135,10 +163,10 @@ int main (void) {
 
 
 
-    int reduction = 2;
+    /*int reduction = 2;
     Size tailleReduite(img_display.cols/reduction, img_display.rows/reduction);
     Mat imreduite = Mat(tailleReduite,CV_8UC3); //cree une image � 3 canaux de profondeur 8 bits chacuns
-    resize(img_display,imreduite,tailleReduite);
+    resize(img_display,imreduite,tailleReduite);*/
 //    imshow("image reduite", imreduite);
 
     //termine le programme lorsqu'une touche est frappee
