@@ -79,7 +79,7 @@ bool parse_page(const std::string &imName, int scripterNb, int pageNb) {
     Mat img_display;
     img_rgb.copyTo(img_display);
 
-    Mat res, res_sub;
+    Mat res;
     Point matchLoc;
 
 
@@ -89,7 +89,6 @@ bool parse_page(const std::string &imName, int scripterNb, int pageNb) {
 
 
     size_t count = symb.size();
-    int res_size;
     for (size_t i = 0; i < count; i++) {
         std::cout << "symbole testé : " << symb[i] << std::endl;
         symboles.push_back(imread(symb[i], IMREAD_GRAYSCALE));
