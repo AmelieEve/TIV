@@ -26,6 +26,48 @@ std::string fixedDigitInt(int input, int digits) {
     return ss.str();
 }
 
+std::string detectSize(Mat &subImage) {
+    vector<cv::String> size_templ;
+    glob("../size_template/*.png", size_templ, false);
+    vector<Mat> size_templates;
+    Mat sub_img_gray;
+    Mat res_sub;
+    cvtColor(subImage, sub_img_gray, COLOR_BGR2GRAY);
+    int res_size = -1;
+    for (size_t j = 0; j < size_templ.size(); j++) {
+        size_templates.push_back(imread(size_templ[j], IMREAD_GRAYSCALE));
+        try {
+            matchTemplate(sub_img_gray, size_templates[j], res_sub, TM_CCORR_NORMED);
+            threshold(res_sub, res_sub, 0.1, 1., THRESH_TOZERO);
+            double minval2, maxval2;
+            double threshold2 = 0.99;
+            Point minloc2, maxloc2;
+            minMaxLoc(res_sub, &minval2, &maxval2, &minloc2, &maxloc2);
+            if (maxval2 >= threshold2) {
+                res_size = j;
+            }
+        } catch (cv::Exception &exception) {
+
+        }
+    }
+    string size="";
+    switch (res_size){
+        case -1 :
+            break;
+        case 0 :
+            size=" large";
+            break;
+        case 1 :
+            size=" medium";
+            break;
+        case 2 :
+            size=" small";
+    }
+    cout << "taille :" << size << endl;
+    return size;
+}
+
+
 int guessRow(int y) {
     // Pour savoir sur quelle ligne on est, on regarde simplement sur un intervalle et puis ItWorks(TM)
     if (y>2466) return 7;
@@ -77,9 +119,6 @@ int main(void) {
     glob("../symboles/*.png", symb, false);
     vector<Mat> symboles;
 
-    vector<cv::String> size_templ;
-    glob("../size_template/*.png", size_templ, false);
-    vector<Mat> size_templates;
 
     size_t count = symb.size();
     int res_size;
@@ -107,40 +146,7 @@ int main(void) {
 
                     Rect crop(matchLoc.x - 40, matchLoc.y - 120, 2100, 360);
                     Mat sub_image = img_display(crop);
-                    Mat sub_img_gray;
-                    cvtColor(sub_image, sub_img_gray, COLOR_BGR2GRAY);
-                    res_size=-1;
-                    for (size_t j = 0; j < size_templ.size(); j++) {
-                        size_templates.push_back(imread(size_templ[j], IMREAD_GRAYSCALE));
-                        try {
-                            matchTemplate(sub_img_gray, size_templates[j], res_sub, TM_CCORR_NORMED);
-                            threshold(res_sub, res_sub, 0.1, 1., THRESH_TOZERO);
-                            double minval2, maxval2;
-                            double threshold2 = 0.98;
-                            Point minloc2, maxloc2;
-                            minMaxLoc(res_sub, &minval2, &maxval2, &minloc2, &maxloc2);
-                            if (maxval2 >= threshold2) {
-                                cout << "j = " << j << endl;
-                                res_size = j;
-                            }
-                        } catch (cv::Exception &exception) {
-
-                        }
-                    }
-                    string size="";
-                    switch (res_size){
-                        case -1 :
-                            break;
-                        case 0 :
-                            size=" large";
-                            break;
-                        case 1 :
-                            size=" medium";
-                            break;
-                        case 2 :
-                            size=" small";
-                    }
-
+                    string size = detectSize(sub_image);
 
                     //imshow(  "test " + symb[i], sub_image);
 //                    i--; //pour retester le meme objet si on l'a déjà trouvé, mais il faut dans ce cas que je genere une sous image ne contenant pas la partie extraite puis refaire l'opération dessus //TODO
