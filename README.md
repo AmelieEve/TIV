@@ -51,3 +51,8 @@ Les données de sortie comptent 44372 fichiers (imagettes + fichier texte, soit 
 En théorie, avec nos 755 pages on devrait avoir 26425 imagettes, cela représente donc 83,96% de réussite sur cette étape.
 
 Le taux de réussite global est alors de 82,32% (22186/(770*35))
+
+
+Sur la base de test, 8/12 pages sont correctement rectifiées. On a en sortie 448 fichiers (soit 224 imagettes).
+
+Le taux de réussite global est alors de 53,33%
